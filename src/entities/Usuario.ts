@@ -2,8 +2,14 @@ import {
     Entity,
     Column,
     PrimaryGeneratedColumn,
-    BaseEntity
+    BaseEntity,
+    OneToMany,
+    ManyToOne,
+    JoinColumn
   } from 'typeorm'
+import { Mascota } from './Mascota'
+import { Objeto } from './Objeto'
+import { Localidad } from './Localidad'
   
   @Entity()
   export class Usuario extends BaseEntity {
@@ -58,7 +64,18 @@ import {
     @Column({nullable:true})
     longitud: string
 
-    // @Column()
-    // idLocalidad: string
+    /* El decorador `@OneToMany(() => Mascota, (mascota) => mascota.usuario)` se utiliza para definir
+    una relación de uno a muchos entre la entidad `Usuario` y la entidad `Mascota`. */
+    @OneToMany(() => Mascota, (mascota) => mascota.usuario)
+    mascotas: Mascota[]
+
+    /* El decorador `@OneToMany(() => Objeto, (objeto) => object.user)` se utiliza para definir una
+    relación de uno a muchos entre la entidad `Usuario` y la entidad `Objeto`. */
+    @OneToMany(() => Objeto, (objeto) => objeto.usuario)
+    objetos: Objeto[]
+
+    @ManyToOne(() => Localidad, (localidad) => localidad.usuarios)
+    @JoinColumn({name:"idLocalidad"})
+    localidad: Localidad 
          
   }

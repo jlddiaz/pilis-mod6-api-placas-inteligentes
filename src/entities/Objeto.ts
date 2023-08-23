@@ -2,8 +2,11 @@ import {
     Entity,
     Column,
     PrimaryGeneratedColumn,
-    BaseEntity
+    BaseEntity,
+    ManyToOne,
+    JoinColumn
   } from 'typeorm'
+import { Usuario } from './Usuario'
   
   @Entity()
   export class Objeto extends BaseEntity {
@@ -25,7 +28,10 @@ import {
     @Column()
     observaciones: string
 
-    // @Column()
-    // propietario: number
+    /* El fragmento de código `@ManyToOne(() => Usuario, (usuario) => usuario.objects)` define una
+    relación de muchos a uno entre la entidad `Objeto` y la entidad `Usuario`. */
+    @ManyToOne(() => Usuario, (usuario) => usuario.objetos)
+    @JoinColumn({name:"idPropietario"})
+    usuario: Usuario    
   }
   
