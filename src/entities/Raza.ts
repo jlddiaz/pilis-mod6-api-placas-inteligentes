@@ -13,7 +13,7 @@ import {
     @Column()
     descripcion: string
 
-    @Column()
-    idEspecie: number
+    // @Column()
+    // idEspecie: number
      
   }

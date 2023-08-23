@@ -8,7 +8,7 @@ import {
 } from '../controllers/usuario.controller'
 const router = Router()
 
-router.get('/usuarios', getUsuario)
+router.get('/usuarios', getUsuarios)
 router.get('/usuarios/:id', getUsuario)
 router.post(
   '/usuarios',

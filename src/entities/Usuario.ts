@@ -10,10 +10,10 @@ import {
     @PrimaryGeneratedColumn()
     idUsuario: number
   
-    @Column()
+    @Column({nullable:true})
     apellido: string
 
-    @Column()
+    @Column({nullable:true})
     nombre: string
 
     @Column()
@@ -22,43 +22,43 @@ import {
     @Column()
     mail: string
 
-    @Column()
+    @Column({nullable:true})
     foto: string
 
-    @Column()
+    @Column({nullable:true})
     telefono: string
 
-    @Column()
+    @Column({nullable:true})
     facebook: string
 
-    @Column()
+    @Column({nullable:true})
     instagram: string
 
-    @Column()
+    @Column({nullable:true})
     telegram: string
 
-    @Column()
+    @Column({nullable:true})
     fechaAlta: Date
 
-    @Column()
+    @Column({nullable:true})
     fechaBaja: Date
 
-    @Column()
+    @Column({nullable:true})
     calle: string
 
-    @Column()
+    @Column({nullable:true})
     numero: string
 
-    @Column()
+    @Column({nullable:true})
     activo: string
 
-    @Column()
+    @Column({nullable:true})
     latitud: string
 
-    @Column()
+    @Column({nullable:true})
     longitud: string
 
-    @Column()
-    idLocalidad: string
+    // @Column()
+    // idLocalidad: string
          
   }

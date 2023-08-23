@@ -16,27 +16,27 @@ import {
     @Column()
     sexo: string
 
-    @Column()
+    @Column({nullable:true})
     vacunas: number
 
-    @Column()
+    @Column({nullable:true})
     fechaNacimiento: Date
 
-    @Column()
+    @Column({nullable:true})
     fechaFallecimiento: number
 
-    @Column()
+    @Column({nullable:true})
     foto: string
 
-    @Column()
+    @Column({nullable:true})
     qr: string
 
-    @Column()
+    @Column({nullable:true})
     observaciones: string
 
-    @Column()
-    idRaza: number
+    // @Column()
+    // idRaza: number
 
-    @Column()
-    idResponsable: number
+    // @Column()
+    // idResponsable: number
   }

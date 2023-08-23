@@ -10,10 +10,10 @@ import {
     @PrimaryGeneratedColumn()
     idObjeto: number
   
-    @Column()
+    @Column({nullable:true})
     fechaAlta: Date
 
-    @Column()
+    @Column({nullable:true})
     fechaBaja: Date
 
     @Column()
@@ -25,7 +25,7 @@ import {
     @Column()
     observaciones: string
 
-    @Column()
-    propietario: number
+    // @Column()
+    // propietario: number
   }
   
