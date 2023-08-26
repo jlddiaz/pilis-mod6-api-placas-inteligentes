@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { Mascota } from '../entities/Mascota'
+import { Perfil } from '../entities/Perfil'
+import { Raza } from '../entities/Raza'
 
 export const getMascotas = async (req: Request, res: Response) => {
   try {
@@ -30,7 +32,27 @@ export const getMascota = async (req: Request, res: Response) => {
 
 export const createMascota = async (req: Request, res: Response) => {
   try {
-    const { nombre, sexo, vacunas, fechaNacimiento, foto, qr, observaciones } = req.body
+    const {
+      nombre,
+      sexo,
+      vacunas,
+      fechaNacimiento,
+      foto,
+      qr,
+      observaciones,
+      idResponsable,
+      idRaza,
+    } = req.body
+    const perfil = await Perfil.findOneBy({
+      idPerfil: parseInt(idResponsable),
+    })
+    const raza = await Raza.findOneBy({
+      idRaza: parseInt(idRaza),
+    })
+    if (!perfil)
+      return res.status(404).json({ message: 'Responsable no encontrado' })
+    if (!raza) return res.status(404).json({ message: 'Raza no encontrada' })
+
     const mascota = new Mascota()
     mascota.nombre = nombre
     mascota.sexo = sexo
@@ -39,6 +61,8 @@ export const createMascota = async (req: Request, res: Response) => {
     mascota.foto = foto
     mascota.qr = qr
     mascota.observaciones = observaciones
+    mascota.perfil = perfil
+    mascota.raza = raza
     await mascota.save()
     return res.json(mascota)
   } catch (error) {
@@ -49,14 +73,29 @@ export const createMascota = async (req: Request, res: Response) => {
 }
 
 export const updateMascota = async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { id, idResponsable, idRaza } = req.params
 
   try {
     const mascota = await Mascota.findOneBy({ idMascota: parseInt(id) })
     if (!mascota)
       return res.status(404).json({ message: 'Mascota no encontrada' })
-
-    await Mascota.update({ idMascota: parseInt(id) }, req.body)
+    const perfil = await Perfil.findOneBy({
+      idPerfil: parseInt(idResponsable),
+    })
+    const raza = await Raza.findOneBy({
+      idRaza: parseInt(idRaza),
+    })
+    if (!perfil)
+      return res.status(404).json({ message: 'Responsable no encontrado' })
+    if (!raza) return res.status(404).json({ message: 'Raza no encontrada' })
+    await Mascota.update(
+      { idMascota: parseInt(id) },
+      {
+        ...req.body,
+        perfil: perfil,
+        raza: raza,
+      }
+    )
 
     return res.sendStatus(204)
   } catch (error) {

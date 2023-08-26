@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Objeto } from '../entities/Objeto'
+import { Perfil } from '../entities/Perfil'
 
 export const getObjetos = async (req: Request, res: Response) => {
   try {
@@ -30,11 +31,18 @@ export const getObjeto = async (req: Request, res: Response) => {
 
 export const createObjeto = async (req: Request, res: Response) => {
   try {
-    const { foto, qr, observaciones } = req.body
+    const { foto, qr, observaciones, idPropietario } = req.body
+    const perfil = await Perfil.findOneBy({
+      idPerfil: parseInt(idPropietario),
+    })
+    if (!perfil)
+      return res.status(404).json({ message: 'Propietario no encontrado' })
+
     const objeto = new Objeto()
     objeto.foto = foto
     objeto.qr = qr
     objeto.observaciones = observaciones
+    objeto.perfil = perfil
     await objeto.save()
     return res.json(objeto)
   } catch (error) {

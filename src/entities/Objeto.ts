@@ -1,37 +1,42 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    BaseEntity,
-    ManyToOne,
-    JoinColumn
-  } from 'typeorm'
-import { Usuario } from './Usuario'
-  
-  @Entity()
-  export class Objeto extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    idObjeto: number
-  
-    @Column({nullable:true})
-    fechaAlta: Date
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+import { Perfil } from './Perfil'
 
-    @Column({nullable:true})
-    fechaBaja: Date
+@Entity()
+export class Objeto extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  idObjeto: number
 
-    @Column()
-    foto: string
+  @Column({ nullable: true })
+  fechaAlta: Date
 
-    @Column()
-    qr: string
+  @Column({ nullable: true })
+  fechaBaja: Date
 
-    @Column()
-    observaciones: string
+  @Column()
+  foto: string
 
-    /* El fragmento de código `@ManyToOne(() => Usuario, (usuario) => usuario.objects)` define una
-    relación de muchos a uno entre la entidad `Objeto` y la entidad `Usuario`. */
-    @ManyToOne(() => Usuario, (usuario) => usuario.objetos)
-    @JoinColumn({name:"idPropietario"})
-    usuario: Usuario    
-  }
-  
+  @Column()
+  qr: string
+
+  @Column()
+  observaciones: string
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
+
+  @ManyToOne(() => Perfil, (perfil) => perfil.objetos)
+  @JoinColumn({ name: 'idPropietario' })
+  perfil: Perfil
+}
