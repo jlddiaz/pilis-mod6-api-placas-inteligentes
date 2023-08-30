@@ -23,13 +23,13 @@ export class Mascota extends BaseEntity {
   sexo: string
 
   @Column({ nullable: true })
-  vacunas: number
+  vacunas: string
 
   @Column({ nullable: true })
   fechaNacimiento: Date
 
-  @Column({ nullable: true })
-  fechaFallecimiento: number
+  // @Column({ nullable: true })
+  // fechaFallecimiento: number
 
   @Column({ nullable: true })
   foto: string

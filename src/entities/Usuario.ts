@@ -4,13 +4,7 @@ import { Perfil } from './Perfil'
 @Entity()
 export class Usuario extends BaseEntity {
   @PrimaryGeneratedColumn()
-  idUsuario: number
-
-  @Column({ nullable: true })
-  apellido: string
-
-  @Column({ nullable: true })
-  nombre: string
+  idUsuario: number 
 
   @Column()
   mail: string

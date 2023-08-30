@@ -13,13 +13,7 @@ import { Perfil } from './Perfil'
 @Entity()
 export class Objeto extends BaseEntity {
   @PrimaryGeneratedColumn()
-  idObjeto: number
-
-  @Column({ nullable: true })
-  fechaAlta: Date
-
-  @Column({ nullable: true })
-  fechaBaja: Date
+  idObjeto: number 
 
   @Column()
   foto: string
@@ -30,6 +24,12 @@ export class Objeto extends BaseEntity {
   @Column()
   observaciones: string
 
+  @Column({ nullable: true })
+  fechaAlta: Date
+
+  @Column({ nullable: true })
+  fechaBaja: Date
+  
   @CreateDateColumn()
   createdAt: Date
 

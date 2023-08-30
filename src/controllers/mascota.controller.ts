@@ -6,7 +6,7 @@ import { Raza } from '../entities/Raza'
 export const getMascotas = async (req: Request, res: Response) => {
   try {
     const mascotas = await Mascota.find()
-    return res.json(mascotas)
+    res.json(mascotas)
   } catch (error) {
     if (error instanceof Error) {
       return res.status(500).json({ message: error.message })
@@ -57,7 +57,7 @@ export const createMascota = async (req: Request, res: Response) => {
     mascota.nombre = nombre
     mascota.sexo = sexo
     mascota.vacunas = vacunas
-    mascota.fechaFallecimiento = fechaNacimiento
+    // mascota.fechaFallecimiento = fechaNacimiento
     mascota.foto = foto
     mascota.qr = qr
     mascota.observaciones = observaciones

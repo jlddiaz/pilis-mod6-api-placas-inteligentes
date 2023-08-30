@@ -32,13 +32,14 @@ export const getPerfil = async (req: Request, res: Response) => {
 
 export const createPerfil = async (req: Request, res: Response) => {
   const {
+    apellido,
+    nombre,
     foto,
     telefono,
     facebook,
     instagram,
     telegram,
-    calle,
-    numero,
+    direccion,
     latitud,
     longitud,
     idLocalidad,
@@ -58,13 +59,14 @@ export const createPerfil = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Usuario no encontrado' })
 
     const perfil = new Perfil()
+    perfil.apellido = apellido
+    perfil.nombre = nombre
     perfil.foto = foto
     perfil.telefono = telefono
     perfil.facebook = facebook
     perfil.instagram = instagram
     perfil.telegram = telegram
-    perfil.calle = calle
-    perfil.numero = numero
+    perfil.direccion = direccion
     perfil.latitud = latitud
     perfil.longitud = longitud
     perfil.localidad = localidad

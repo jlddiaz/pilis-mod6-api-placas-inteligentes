@@ -20,11 +20,29 @@ export class Perfil extends BaseEntity {
   @PrimaryGeneratedColumn()
   idPerfil: number
 
+  @Column()
+  apellido: string
+
+  @Column()
+  nombre: string
+
   @Column({ nullable: true })
   foto: string
 
-  @Column({ nullable: true })
+  @Column()
   telefono: string
+
+  @Column({ nullable: true })
+  direccion: string
+
+  @Column({ default: true })
+  activo: string
+
+  @Column({ nullable: true })
+  latitud: string
+
+  @Column({ nullable: true })
+  longitud: string
 
   @Column({ nullable: true })
   facebook: string
@@ -39,22 +57,7 @@ export class Perfil extends BaseEntity {
   fechaAlta: Date
 
   @Column({ nullable: true })
-  fechaBaja: Date
-
-  @Column({ nullable: true })
-  calle: string
-
-  @Column({ default: true })
-  numero: string
-
-  @Column({ nullable: true })
-  activo: string
-
-  @Column({ nullable: true })
-  latitud: string
-
-  @Column({ nullable: true })
-  longitud: string
+  fechaBaja: Date 
 
   @CreateDateColumn()
   createdAt: Date
