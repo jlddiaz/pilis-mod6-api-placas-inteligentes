@@ -19,7 +19,7 @@ export class Mascota extends BaseEntity {
   @Column()
   nombre: string
 
-  @Column()
+  @Column({ nullable: true })
   sexo: string
 
   @Column({ nullable: true })

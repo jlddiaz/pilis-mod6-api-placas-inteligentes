@@ -1,4 +1,6 @@
+import { UsuarioResponseDTO } from './../dto/usuario.dto'
 import { Request, Response } from 'express'
+import { plainToClass } from 'class-transformer'
 
 // -------- Agregar para jwt
 import jwt from 'jsonwebtoken'
@@ -11,14 +13,16 @@ let refreshTokens: (string | undefined)[] = []
 
 const createToken = (usuario: Usuario) => {
   // Se crean el jwt y refresh token
-  const token = jwt.sign({ id: usuario.idUsuario, mail: usuario.mail }, jwtSecret, {
-    expiresIn: '120m',
-  })
-  const refreshToken = jwt.sign(
-    { mail: usuario.mail },
-    jwtRefreshTokenSecret,
-    { expiresIn: '90d' }
+  const token = jwt.sign(
+    { id: usuario.idUsuario, mail: usuario.mail },
+    jwtSecret,
+    {
+      expiresIn: '120m',
+    }
   )
+  const refreshToken = jwt.sign({ mail: usuario.mail }, jwtRefreshTokenSecret, {
+    expiresIn: '90d',
+  })
 
   refreshTokens.push(refreshToken)
   return {
@@ -31,7 +35,31 @@ const createToken = (usuario: Usuario) => {
 export const getUsuarios = async (req: Request, res: Response) => {
   try {
     const usuarios = await Usuario.find()
-    return res.json(usuarios)
+    const usuariosResponse = usuarios.map((usuario) => {
+      return plainToClass(UsuarioResponseDTO, usuario, {
+        excludeExtraneousValues: true,
+      })
+    })
+    return res.json(usuariosResponse)
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message })
+    }
+  }
+}
+
+export const getUsuario = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const usuario = await Usuario.findOneBy({ idUsuario: parseInt(id) })
+
+    if (!usuario)
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+
+    const usuarioResponse = plainToClass(UsuarioResponseDTO, usuario, {
+      excludeExtraneousValues: true,
+    })
+    return res.json(usuarioResponse)
   } catch (error) {
     if (error instanceof Error) {
       return res.status(500).json({ message: error.message })
@@ -44,9 +72,7 @@ export const signUp = async (
   res: Response
 ): Promise<Response> => {
   if (!req.body.mail || !req.body.password) {
-    return res
-      .status(400)
-      .json({ msg: 'Please. Send your mail and password' })
+    return res.status(400).json({ msg: 'Please. Send your mail and password' })
   }
 
   const usuario = await Usuario.findOneBy({ mail: req.body.mail })
@@ -56,9 +82,12 @@ export const signUp = async (
 
   const newUser = new Usuario()
   newUser.mail = req.body.mail
-  newUser.password = await createHash(req.body.password)  
+  newUser.password = await createHash(req.body.password)
   await newUser.save()
-  return res.status(201).json(newUser)
+  const usuarioResponse = plainToClass(UsuarioResponseDTO, newUser, {
+    excludeExtraneousValues: true,
+  })
+  return res.status(201).json(usuarioResponse)
 }
 
 export const signIn = async (
@@ -66,9 +95,7 @@ export const signIn = async (
   res: Response
 ): Promise<Response> => {
   if (!req.body.mail || !req.body.password) {
-    return res
-      .status(400)
-      .json({ msg: 'Please. Send your mail and password' })
+    return res.status(400).json({ msg: 'Please. Send your mail and password' })
   }
 
   const user = await Usuario.findOneBy({ mail: req.body.mail })
@@ -82,7 +109,7 @@ export const signIn = async (
   }
 
   return res.status(400).json({
-    msg: 'The username or password are incorrect',
+    msg: 'The mail or password are incorrect',
   })
 }
 

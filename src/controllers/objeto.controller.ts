@@ -1,6 +1,8 @@
+import { plainToClass } from 'class-transformer'
 import { Request, Response } from 'express'
 import { Objeto } from '../entities/Objeto'
 import { Perfil } from '../entities/Perfil'
+import { ObjetoDTO } from '../dto/objeto.dto'
 
 export const getObjetos = async (req: Request, res: Response) => {
   try {
@@ -58,8 +60,16 @@ export const updateObjeto = async (req: Request, res: Response) => {
     const objeto = await Objeto.findOneBy({ idObjeto: parseInt(id) })
     if (!objeto)
       return res.status(404).json({ message: 'Objeto no encontrado' })
+    
+    const perfil = req.body.idPropietario
+      ? await Perfil.findOneBy({ idPerfil: parseInt(req.body.idPropietario) })
+      : ''
 
-    await Objeto.update({ idObjeto: parseInt(id) }, req.body)
+    const newObjeto = plainToClass(ObjetoDTO, req.body, {
+      excludeExtraneousValues: true,
+    })
+    if (perfil) newObjeto.perfil = perfil
+    await Objeto.update({ idObjeto: parseInt(id) }, newObjeto)
 
     return res.sendStatus(204)
   } catch (error) {

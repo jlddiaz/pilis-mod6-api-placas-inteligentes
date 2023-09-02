@@ -1,6 +1,7 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import 'reflect-metadata'
 
 import perfilRoutes from './routes/perfil.router'
 import objetoRoutes from './routes/objeto.router'

@@ -1,7 +1,9 @@
+import { plainToClass } from 'class-transformer'
 import { Request, Response } from 'express'
 import { Mascota } from '../entities/Mascota'
 import { Perfil } from '../entities/Perfil'
 import { Raza } from '../entities/Raza'
+import { MascotaDTO } from '../dto/mascota.dto'
 
 export const getMascotas = async (req: Request, res: Response) => {
   try {
@@ -73,29 +75,32 @@ export const createMascota = async (req: Request, res: Response) => {
 }
 
 export const updateMascota = async (req: Request, res: Response) => {
-  const { id, idResponsable, idRaza } = req.params
-
   try {
+    const { id } = req.params
+    const { idResponsable, idRaza } = req.body
     const mascota = await Mascota.findOneBy({ idMascota: parseInt(id) })
     if (!mascota)
       return res.status(404).json({ message: 'Mascota no encontrada' })
-    const perfil = await Perfil.findOneBy({
-      idPerfil: parseInt(idResponsable),
+
+    const perfil = idResponsable
+      ? await Perfil.findOneBy({
+          idPerfil: parseInt(idResponsable),
+        })
+      : ''
+
+    const raza = idRaza
+      ? await Raza.findOneBy({
+          idRaza: parseInt(idRaza),
+        })
+      : ''
+
+    const newMascota = plainToClass(MascotaDTO, req.body, {
+      excludeExtraneousValues: true,
     })
-    const raza = await Raza.findOneBy({
-      idRaza: parseInt(idRaza),
-    })
-    if (!perfil)
-      return res.status(404).json({ message: 'Responsable no encontrado' })
-    if (!raza) return res.status(404).json({ message: 'Raza no encontrada' })
-    await Mascota.update(
-      { idMascota: parseInt(id) },
-      {
-        ...req.body,
-        perfil: perfil,
-        raza: raza,
-      }
-    )
+    if (perfil) newMascota.perfil = perfil
+    if (raza) newMascota.raza = raza
+    console.log(newMascota)
+    await Mascota.update({ idMascota: parseInt(id) }, newMascota)
 
     return res.sendStatus(204)
   } catch (error) {
