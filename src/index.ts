@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import app from './app'
 import { AppDataSource } from './db'
-const port = 3000
+const port = 3001
 
 async function main() {
   try {

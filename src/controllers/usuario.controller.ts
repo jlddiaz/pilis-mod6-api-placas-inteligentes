@@ -105,7 +105,7 @@ export const signIn = async (
 
   const isMatch = await comparePassword(user, req.body.password)
   if (isMatch) {
-    return res.status(400).json({ credentials: createToken(user) })
+    return res.status(200).json({...createToken(user)})
   }
 
   return res.status(400).json({
