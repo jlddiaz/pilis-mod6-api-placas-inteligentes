@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Perfil } from '../entities/Perfil'
 import { Localidad } from '../entities/Localidad'
 import { Usuario } from '../entities/Usuario'
+import { plainToClass } from 'class-transformer'
 
 export const getPerfiles = async (req: Request, res: Response) => {
   try {

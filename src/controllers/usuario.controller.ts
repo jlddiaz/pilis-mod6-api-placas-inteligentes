@@ -1,3 +1,4 @@
+import { AppDataSource } from './../db';
 import { UsuarioResponseDTO } from './../dto/usuario.dto'
 import { Request, Response } from 'express'
 import { plainToClass } from 'class-transformer'
@@ -67,6 +68,28 @@ export const getUsuario = async (req: Request, res: Response) => {
   }
 }
 
+// export const getPerfilByIdUsuario = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params
+//     // const usuario = await Usuario.findOneBy({ idUsuario: parseInt(id) })
+//     // const usuario = await Usuario.findOneBy({idUsuario: parseInt(id)})
+
+//     const usuario = await Usuario
+//       .createQueryBuilder('usuario')
+//       .leftJoinAndSelect('usuario.perfil', 'perfil')
+//       .where({ idUsuario: parseInt(id) })
+//       .getOne()
+      
+//     if (!usuario)
+//       return res.status(404).json({ message: 'Usuario no encontrado' })
+//     return res.json(usuario)
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       return res.status(500).json({ message: error.message })
+//     }
+//   }
+// }
+
 export const signUp = async (
   req: Request,
   res: Response
@@ -105,7 +128,10 @@ export const signIn = async (
 
   const isMatch = await comparePassword(user, req.body.password)
   if (isMatch) {
-    return res.status(200).json({...createToken(user)})
+    const userResponse = plainToClass(UsuarioResponseDTO, user, {
+      excludeExtraneousValues: true,
+    })
+    return res.status(200).json({ ...createToken(user), ...userResponse })
   }
 
   return res.status(400).json({

@@ -1,4 +1,5 @@
 import { Expose, Exclude } from "class-transformer";
+import { Perfil } from "../entities/Perfil";
 
 export class UsuarioResponseDTO{
     @Expose()
@@ -6,6 +7,9 @@ export class UsuarioResponseDTO{
 
     @Expose()
     mail: string
+
+    @Expose()
+    perfil: Perfil
   
     // @Expose()
     // createdAt: Date
