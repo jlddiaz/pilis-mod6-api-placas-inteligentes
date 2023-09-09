@@ -5,12 +5,14 @@ import {
   createPerfil,
   updatePerfil,
   deletePerfil,
+  getPerfilByIdUsuario,
 } from '../controllers/perfil.controller'
 import { validateCreatePerfil } from '../validators/perfil.validator'
 const router = Router()
 
 router.get('/perfiles', getPerfiles)
 router.get('/perfiles/:id', getPerfil)
+router.get('/perfilesByIdUsuario/:id', getPerfilByIdUsuario)
 router.post(
   '/perfiles',
   validateCreatePerfil,

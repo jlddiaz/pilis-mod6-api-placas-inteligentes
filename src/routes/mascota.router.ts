@@ -5,11 +5,13 @@ import {
   createMascota,
   updateMascota,
   deleteMascota,
+  getMascotasByIdPerfil,
 } from '../controllers/mascota.controller'
 const router = Router()
 
 router.get('/mascotas', getMascotas)
 router.get('/mascotas/:id', getMascota)
+router.get('/mascotasByIdPerfil/:id', getMascotasByIdPerfil)
 router.post(
   '/mascotas',
   createMascota

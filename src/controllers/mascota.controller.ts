@@ -32,6 +32,24 @@ export const getMascota = async (req: Request, res: Response) => {
   }
 }
 
+export const getMascotasByIdPerfil = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const perfil = await Perfil.findOne({
+      where: { idPerfil: parseInt(id) },
+      relations: ['mascotas'],
+    })
+    if (!perfil?.mascotas)
+      return res.status(404).json({ message: 'Mascotas no encontradas' })
+    
+    return res.json(perfil.mascotas)
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message })
+    }
+  }
+}
 export const createMascota = async (req: Request, res: Response) => {
   try {
     const {

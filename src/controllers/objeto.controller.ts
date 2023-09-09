@@ -31,6 +31,25 @@ export const getObjeto = async (req: Request, res: Response) => {
   }
 }
 
+export const getObjetosByIdPerfil = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const perfil = await Perfil.findOne({
+      where: { idPerfil: parseInt(id) },
+      relations: ['objetos'],
+    })
+    if (!perfil?.objetos)
+      return res.status(404).json({ message: 'Objetos no encontrados' })
+    
+    return res.json(perfil.objetos)
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message })
+    }
+  }
+}
+
 export const createObjeto = async (req: Request, res: Response) => {
   try {
     const { foto, qr, observaciones, idPropietario } = req.body

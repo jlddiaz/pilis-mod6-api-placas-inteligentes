@@ -31,6 +31,25 @@ export const getPerfil = async (req: Request, res: Response) => {
   }
 }
 
+export const getPerfilByIdUsuario = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const usuario = await Usuario.findOne({
+      where: { idUsuario: parseInt(id) },
+      relations: ['perfil'],
+    })
+    if (!usuario?.perfil)
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    
+    return res.json(usuario.perfil)
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message })
+    }
+  }
+}
+
 export const createPerfil = async (req: Request, res: Response) => {
   const {
     apellido,
