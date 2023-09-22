@@ -3,14 +3,14 @@ import { validateResult } from '../helpers/validateHelper'
 import { NextFunction, Request, Response } from 'express'
 
 export const validateCreateObjeto = [
-  check('foto')
+  check('nombre')
     .exists()
     .notEmpty()
     .withMessage('Este campo es requerido')
     .isString()
     .withMessage('Este campo debe ser un string!')
     .isLength({ min: 3 }),
-  check('qr')
+  check('foto')
     .exists()
     .notEmpty()
     .withMessage('Este campo es requerido')

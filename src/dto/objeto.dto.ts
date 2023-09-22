@@ -2,8 +2,8 @@ import { Perfil } from '../entities/Perfil'
 import { Expose } from 'class-transformer'
 
 export class ObjetoDTO {
-//   @Expose()
-//   idObjeto: number
+  @Expose()
+  nombre: string
 
   @Expose()
   foto: string

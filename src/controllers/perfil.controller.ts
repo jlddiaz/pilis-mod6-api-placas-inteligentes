@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import { Perfil } from '../entities/Perfil'
 import { Localidad } from '../entities/Localidad'
 import { Usuario } from '../entities/Usuario'
-import { plainToClass } from 'class-transformer'
 
 export const getPerfiles = async (req: Request, res: Response) => {
   try {
@@ -18,7 +17,11 @@ export const getPerfiles = async (req: Request, res: Response) => {
 export const getPerfil = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const perfil = await Perfil.findOneBy({ idPerfil: parseInt(id) })
+    // const perfil = await Perfil.findOneBy({ idPerfil: parseInt(id) })
+    const perfil = await Perfil.findOne({
+      where: { idPerfil: parseInt(id) },
+      relations: ['localidad'],
+    })
 
     if (!perfil)
       return res.status(404).json({ message: 'Perfil no encontrado' })
@@ -40,7 +43,7 @@ export const getPerfilByIdUsuario = async (req: Request, res: Response) => {
       relations: ['perfil'],
     })
     if (!usuario?.perfil)
-      return res.status(404).json({ message: 'Usuario no encontrado' })
+      return res.status(404).json({ message: 'Perfil no encontrado' })
     
     return res.json(usuario.perfil)
   } catch (error) {

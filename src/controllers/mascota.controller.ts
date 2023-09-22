@@ -19,7 +19,10 @@ export const getMascotas = async (req: Request, res: Response) => {
 export const getMascota = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const mascota = await Mascota.findOneBy({ idMascota: parseInt(id) })
+    const mascota = await Mascota.findOne({
+      where: { idMascota: parseInt(id) },
+      relations: ['perfil'],
+    })
 
     if (!mascota)
       return res.status(404).json({ message: 'Mascota no encontrada' })
@@ -35,14 +38,14 @@ export const getMascota = async (req: Request, res: Response) => {
 export const getMascotasByIdPerfil = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    
+
     const perfil = await Perfil.findOne({
       where: { idPerfil: parseInt(id) },
       relations: ['mascotas'],
     })
     if (!perfil?.mascotas)
       return res.status(404).json({ message: 'Mascotas no encontradas' })
-    
+
     return res.json(perfil.mascotas)
   } catch (error) {
     if (error instanceof Error) {
@@ -56,7 +59,7 @@ export const createMascota = async (req: Request, res: Response) => {
       nombre,
       sexo,
       vacunas,
-      fechaNacimiento,
+      edad,
       foto,
       qr,
       observaciones,
@@ -77,7 +80,7 @@ export const createMascota = async (req: Request, res: Response) => {
     mascota.nombre = nombre
     mascota.sexo = sexo
     mascota.vacunas = vacunas
-    // mascota.fechaFallecimiento = fechaNacimiento
+    mascota.edad = edad
     mascota.foto = foto
     mascota.qr = qr
     mascota.observaciones = observaciones

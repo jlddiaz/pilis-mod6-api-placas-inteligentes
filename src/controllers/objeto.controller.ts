@@ -18,7 +18,10 @@ export const getObjetos = async (req: Request, res: Response) => {
 export const getObjeto = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const objeto = await Objeto.findOneBy({ idObjeto: parseInt(id) })
+    const objeto = await Objeto.findOne({
+      where: { idObjeto: parseInt(id) },
+      relations: ['perfil'],
+    })
 
     if (!objeto)
       return res.status(404).json({ message: 'Objeto no encontrado' })
@@ -34,14 +37,14 @@ export const getObjeto = async (req: Request, res: Response) => {
 export const getObjetosByIdPerfil = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    
+
     const perfil = await Perfil.findOne({
       where: { idPerfil: parseInt(id) },
       relations: ['objetos'],
     })
     if (!perfil?.objetos)
       return res.status(404).json({ message: 'Objetos no encontrados' })
-    
+
     return res.json(perfil.objetos)
   } catch (error) {
     if (error instanceof Error) {
@@ -52,7 +55,7 @@ export const getObjetosByIdPerfil = async (req: Request, res: Response) => {
 
 export const createObjeto = async (req: Request, res: Response) => {
   try {
-    const { foto, qr, observaciones, idPropietario } = req.body
+    const { nombre, foto, qr, observaciones, idPropietario } = req.body
     const perfil = await Perfil.findOneBy({
       idPerfil: parseInt(idPropietario),
     })
@@ -60,6 +63,7 @@ export const createObjeto = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Propietario no encontrado' })
 
     const objeto = new Objeto()
+    objeto.nombre = nombre
     objeto.foto = foto
     objeto.qr = qr
     objeto.observaciones = observaciones
@@ -79,7 +83,7 @@ export const updateObjeto = async (req: Request, res: Response) => {
     const objeto = await Objeto.findOneBy({ idObjeto: parseInt(id) })
     if (!objeto)
       return res.status(404).json({ message: 'Objeto no encontrado' })
-    
+
     const perfil = req.body.idPropietario
       ? await Perfil.findOneBy({ idPerfil: parseInt(req.body.idPropietario) })
       : ''

@@ -26,7 +26,7 @@ export class Mascota extends BaseEntity {
   vacunas: string
 
   @Column({ nullable: true })
-  fechaNacimiento: Date
+  edad:number
 
   // @Column({ nullable: true })
   // fechaFallecimiento: number

@@ -16,9 +16,12 @@ export class Objeto extends BaseEntity {
   idObjeto: number 
 
   @Column()
-  foto: string
+  nombre: string
 
   @Column()
+  foto: string
+
+  @Column({ nullable: true })
   qr: string
 
   @Column()

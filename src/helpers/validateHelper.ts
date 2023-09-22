@@ -6,11 +6,16 @@ export const validateResult = (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    validationResult(req).throw()
-    return next()
-  } catch (error) {
-    res.status(403)
-    res.send({ errors: error })
+  // try {
+  //   validationResult(req).throw()
+  //   return next()
+  // } catch (error) {
+  //   res.status(403).json(error)
+  // }
+
+  const result = validationResult(req)
+  if(!result.isEmpty()){
+    return res.status(400).json({ errors: result.array() });
   }
+  return next()
 }
